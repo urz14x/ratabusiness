@@ -38,7 +38,7 @@ import { Button } from "@/Components/ui/button";
 export default function Dashboard({ auth }) {
     const { user } = auth;
     const { total, wallet } = usePage().props;
-    console.log(wallet);
+
     const convertToIDR = (credit) => {
         return new Intl.NumberFormat("id-ID", {
             style: "currency",
@@ -53,15 +53,20 @@ export default function Dashboard({ auth }) {
         { month: "April", desktop: 73, mobile: 190 },
         { month: "May", desktop: 209, mobile: 130 },
         { month: "June", desktop: 214, mobile: 140 },
+        { month: "July", desktop: 214, mobile: 140 },
+        { month: "Aug", desktop: 214, mobile: 140 },
+        { month: "Sept", desktop: 214, mobile: 140 },
+        { month: "Oktober", desktop: 214, mobile: 140 },
+        { month: "November", desktop: 214, mobile: 140 },
     ];
     const chartConfig = {
         desktop: {
             label: "Desktop",
-            color: "hsl(var(--chart-1))",
+            color: "var(--chart-1)",
         },
         mobile: {
             label: "Mobile",
-            color: "hsl(var(--chart-2))",
+            color: "hsl(var(--muted-foreground))",
         },
     };
     const dashboards = [
@@ -153,24 +158,11 @@ export default function Dashboard({ auth }) {
             </header>
             <div className="w-full">
                 <Container>
-                    <div className="flex items-center justify-between">
-                        <header>
-                            <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight mb-5 mt-3">
-                                Selamat Datang di Dashboard Rata! {user.name} 👋
-                            </h3>
-                        </header>
-
-                        <Button
-                            variant="outline"
-                            className="flex items-center mb-2 gap-2"
-                        >
-                            <span>
-                                <Calendar className="w-4 h-4" />
-                            </span>
-                            <span>{dateNow()}</span>
-                            {dateNow()}
-                        </Button>
-                    </div>
+                    <header>
+                        <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight mb-5 mt-3">
+                            Selamat Datang di Dashboard Rata! {user.name} 👋
+                        </h3>
+                    </header>
 
                     <Tabs defaultValue="account" className="w-full">
                         <TabsList>
@@ -181,7 +173,7 @@ export default function Dashboard({ auth }) {
                         </TabsList>
                         <TabsContent value="account" className="w-full">
                             <div className="flex flex-col">
-                                <div className="grid grid-cols-5 gap-4 mb-3">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 mb-3">
                                     {dashboards.map(
                                         ({ title, count, icon }) => (
                                             <Card key={title}>
@@ -212,9 +204,9 @@ export default function Dashboard({ auth }) {
                                         )
                                     )}
                                 </div>
-                                <div className="grid grid-cols-2">
-                                    <div className="">
-                                        <Card className="w-[450px]">
+                                <div className="flex flex-col lg:flex-row gap-4">
+                                    <div className="w-full lg:w-1/2">
+                                        <Card>
                                             <CardHeader>
                                                 <CardTitle>
                                                     Bar Chart - Multiple
@@ -280,8 +272,8 @@ export default function Dashboard({ auth }) {
                                             </CardFooter>
                                         </Card>
                                     </div>
-                                    <div className="">
-                                        <Card className="">
+                                    <div className="w-full lg:w-1/2">
+                                        <Card>
                                             <CardHeader>
                                                 <CardTitle>
                                                     Belum Melakukan Transaksi
@@ -312,6 +304,7 @@ export default function Dashboard({ auth }) {
                                                         {invoices.map(
                                                             (invoice) => (
                                                                 <TableRow
+                                                                    className="h-14"
                                                                     key={
                                                                         invoice.invoice
                                                                     }

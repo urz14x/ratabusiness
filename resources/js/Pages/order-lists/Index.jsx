@@ -50,7 +50,6 @@ import {
     BreadcrumbItem,
     BreadcrumbLink,
     BreadcrumbList,
-    BreadcrumbPage,
     BreadcrumbSeparator,
 } from "@/Components/ui/breadcrumb";
 
@@ -245,38 +244,43 @@ export default function Index({ orders }) {
                                     </Table>
                                 ) : (
                                     <div className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
-                                        <div
-                                            className="flex flex-1 items-center justify-center rounded-lg p-3 border border-dashed shadow-sm"
-
-                                        >
+                                        <div className="flex flex-1 items-center justify-center rounded-lg p-3 border border-dashed shadow-sm">
                                             <div className="flex flex-col items-center gap-1 text-center">
                                                 <h3 className="text-2xl font-bold tracking-tight">
-                                                    Ternyata Kamu belum mempunyai pesanan...
+                                                    Ternyata Kamu belum
+                                                    mempunyai pesanan...
                                                 </h3>
                                                 <p className="text-sm text-muted-foreground mb-3">
-                                                    Tekan tombol Pesanan Baru dibawah 👇
+                                                    Tekan tombol Pesanan Baru
+                                                    dibawah 👇
                                                 </p>
                                                 <Dialog>
-                                <DialogTrigger asChild>
-                                    <Button className="flex items-center gap-2 mb-2 rounded-full">
-                                        <span>
-                                            <PlusIcon className="w-4 h-4" />
-                                        </span>
-                                        <span>Pesanan Baru</span>
-                                    </Button>
-                                </DialogTrigger>
-                                <DialogContent className="sm:max-w-[425px]">
-                                    <DialogHeader>
-                                        <DialogTitle>Pesanan Baru!</DialogTitle>
-                                        <DialogDescription>
-                                            Buat data pesanan baru di Rata?
-                                        </DialogDescription>
-                                    </DialogHeader>
-                                    {/* Form Pesanan baru */}
-                                    <FormNewOrder />
-                                    {/* Akhir Form Pesanan baru */}
-                                </DialogContent>
-                            </Dialog>
+                                                    <DialogTrigger asChild>
+                                                        <Button className="flex items-center gap-2 mb-2 rounded-full">
+                                                            <span>
+                                                                <PlusIcon className="w-4 h-4" />
+                                                            </span>
+                                                            <span>
+                                                                Pesanan Baru
+                                                            </span>
+                                                        </Button>
+                                                    </DialogTrigger>
+                                                    <DialogContent className="sm:max-w-[425px]">
+                                                        <DialogHeader>
+                                                            <DialogTitle>
+                                                                Pesanan Baru!
+                                                            </DialogTitle>
+                                                            <DialogDescription>
+                                                                Buat data
+                                                                pesanan baru di
+                                                                Rata?
+                                                            </DialogDescription>
+                                                        </DialogHeader>
+                                                        {/* Form Pesanan baru */}
+                                                        <FormNewOrder />
+                                                        {/* Akhir Form Pesanan baru */}
+                                                    </DialogContent>
+                                                </Dialog>
                                             </div>
                                         </div>
                                     </div>

@@ -18,7 +18,7 @@ module.exports = {
         },
         extend: {
             colors: {
-                brand: '#00B1DE',
+                brand: "#00B1DE",
                 border: "hsl(var(--border))",
                 input: "hsl(var(--input))",
                 ring: "hsl(var(--ring))",
@@ -73,9 +73,8 @@ module.exports = {
                 "accordion-up": "accordion-up 0.2s ease-out",
             },
             fontFamily: {
-                'display': ['Urbanist', 'sans-serif']
-
-            }
+                display: ["Urbanist", "sans-serif"],
+            },
         },
     },
     plugins: [require("tailwindcss-animate"), require("@tailwindcss/forms")],

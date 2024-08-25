@@ -11,7 +11,6 @@ import { Button } from "@/Components/ui/button";
 import { Input } from "@/Components/ui/input";
 import { useForm } from "@inertiajs/react";
 
-
 export default function FormNewOrder() {
     const [isPaid, setIsPaid] = useState(false);
     const { data, setData, post, errors, processing, reset } = useForm({
@@ -30,6 +29,8 @@ export default function FormNewOrder() {
         if (val === "Lunas") {
             setIsPaid(true);
         } else if (val === "Pending") {
+            setIsPaid(false);
+        } else if (val === "Belum") {
             setIsPaid(false);
         }
     };
@@ -83,6 +84,7 @@ export default function FormNewOrder() {
                     </SelectTrigger>
                     <SelectContent>
                         <SelectItem value="Lunas">Lunas</SelectItem>
+                        <SelectItem value="Belum">Belum</SelectItem>
                         <SelectItem value="Pending">Pending</SelectItem>
                     </SelectContent>
                 </Select>
@@ -97,9 +99,7 @@ export default function FormNewOrder() {
                         type="text"
                         id="amount"
                         value={data.amount}
-                        onChange={(e) =>
-                            setData("amount", e.target.value)
-                        }
+                        onChange={(e) => setData("amount", e.target.value)}
                         placeholder="250.000"
                     />
                     {errors.amount && (
@@ -112,6 +112,5 @@ export default function FormNewOrder() {
                 Buat Pesanan!
             </Button>
         </form>
-
     );
 }
