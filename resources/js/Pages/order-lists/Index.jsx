@@ -1,299 +1,144 @@
-import React from "react";
-import App from "@/Layouts/App.jsx";
-import { Head, usePage } from "@inertiajs/react";
-import Container from "@/Components/Container";
-import Navbar from "@/Layouts/Navbar";
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-} from "@/Components/ui/card";
-import {
-    Globe,
-    Image,
-    ListOrdered,
-    MoreHorizontal,
-    PlusIcon,
-} from "lucide-react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/Components/ui/tabs";
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/Components/ui/table";
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from "@/Components/ui/dialog";
+import React, { useState } from 'react'
+import App from '@/Layouts/App.jsx'
+import { Head, Link, router, usePage } from '@inertiajs/react'
+import Container from '@/Components/Container'
 
-import { Button } from "@/Components/ui/button";
-import FormNewOrder from "./FormNewOrder";
-import { Badge } from "@/Components/ui/badge";
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuTrigger,
-} from "@/Components/ui/dropdown-menu";
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/Components/ui/card'
 import {
-    Breadcrumb,
-    BreadcrumbItem,
-    BreadcrumbLink,
-    BreadcrumbList,
-    BreadcrumbSeparator,
-} from "@/Components/ui/breadcrumb";
+    ClipboardPlus, Edit2,
+    Printer, TrashIcon,
 
-export default function Index({ orders }) {
-    const { total, website } = usePage().props;
-    const dashboards = [
-        {
-            title: "Total Pesanan",
-            count: total.order,
-            icon: <ListOrdered className="w-4 h-4" />,
-        },
-        {
-            title: "Pembuatan Website",
-            count: total.website,
-            icon: <Globe className="w-4 h-4" />,
-        },
-        {
-            title: "Desain Banner",
-            count: total.banner,
-            icon: <Image className="w-4 h-4" />,
-        },
-        {
-            title: "Desain Slide",
-            count: total.design,
-            icon: <Image className="w-4 h-4" />,
-        },
-    ];
+} from 'lucide-react'
+import { Button } from '@/Components/ui/button'
 
-    return (
-        <>
-            <Head title="Semua Pesanan Pesanan" />
-            <header>
-                <Navbar title="Daftar Pesanan" />
+import { cva } from 'class-variance-authority'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/Components/ui/table.jsx'
+import { Badge } from '@/Components/ui/badge.jsx'
+import { Input } from '@/Components/ui/input.jsx'
+import { useFilter } from '@/hooks/useFilter.js'
+import {
+    AlertDialog, AlertDialogAction, AlertDialogCancel,
+    AlertDialogContent, AlertDialogDescription, AlertDialogFooter,
+    AlertDialogHeader, AlertDialogTitle,
+    AlertDialogTrigger,
+} from '@/Components/ui/alert-dialog.jsx'
+export default function Index(props) {
+  const {data: orders} = props.orders;
+  const [params, setParams] = useState(props.state);
+
+  useFilter({
+      route: route('order.list.index'),
+      values: params,
+      only: ['orders'],
+  });
+  const deleteOrder = (id) => {
+      router.delete(route('order.list.destroy', id))
+  }
+  return (
+    <>
+      <Head title="Semua Pesanan Pesanan" />
+
+        <Container className="flex flex-col space-y-3 transition-all lg:px-4">
+            <header className="flex flex-col md:flex-row justify-between items-center w-full mb-3 py-4 lg:py-4 bg-graph-paper-[#020617]/5">
+                <h3 className="text-2xl font-semibold tracking-tight mb-3">
+                    &#128230; Daftar Pesanan Produk
+                </h3>
+                <section className='flex items-center gap-x-2'>
+                    <Button asChild>
+                        <Link href={route('order.list.create')} className={`flex items-center text-xs gap-2`}>
+                            <span>
+                                <ClipboardPlus className="w-4 h-4" />
+                            </span>
+                                <span>
+                                Pesanan baru
+                            </span>
+                        </Link>
+                    </Button>
+
+                    <Button variant={'outline'} className="flex items-center gap-x-2">
+                        <span>Ekspor</span>
+                        <i><Printer className={'w-4 h-4'} /> </i>
+                    </Button>
+                </section>
             </header>
-            <Container>
-                <Breadcrumb className="py-3">
-                    <BreadcrumbList>
-                        <BreadcrumbItem>
-                            <BreadcrumbLink href="/">Home</BreadcrumbLink>
-                        </BreadcrumbItem>
-                        <BreadcrumbSeparator />
-                        <BreadcrumbItem>
-                            <BreadcrumbLink href="/components">
-                                Daftar Pemesanan
-                            </BreadcrumbLink>
-                        </BreadcrumbItem>
-                    </BreadcrumbList>
-                </Breadcrumb>
+            <Card>
+                <CardHeader>
+                    <CardTitle>
+                        Daftar Pesanan pelanggan
+                    </CardTitle>
+                    <CardDescription>
+                        Berikut beberapa Produk yang ada pada Rata Business
+                    </CardDescription>
+                    <CardDescription>
+                        <Input type={'text'} value={params?.search} onChange={e => setParams((prev) => ({
+                            ...prev, search: e.target.value
+                        }))} placeholder={'Cari Pesanan'} className={'w-full md:w-3/2'} />
+                    </CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>ID</TableHead>
+                                <TableHead>Dibuat</TableHead>
+                                <TableHead>Nama Pemesan</TableHead>
+                                <TableHead>Status</TableHead>
+                                <TableHead>Aksi</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {orders.map((order, i) => (
+                                <TableRow key={i}>
+                                    <TableCell>{order.id}</TableCell>
+                                    <TableCell>{order.created}</TableCell>
+                                    <TableCell className='text-sm'>{order.customer}</TableCell>
+                                    <TableCell> <Badge variant={`${order.status === "draf" ? 'outline' :
+                                    'default'}`}>{order.status}</Badge>
+                                    </TableCell>
 
-                <Tabs defaultValue="overview">
-                    <div className="flex items-center">
-                        <TabsList>
-                            <TabsTrigger value="overview">Semua</TabsTrigger>
-                            <TabsTrigger value="status">
-                                Status Pembayaran
-                            </TabsTrigger>
-                        </TabsList>
-                        <div className="ml-auto flex gap-2">
-                            <Dialog>
-                                <DialogTrigger asChild>
-                                    <Button className="flex items-center gap-2 mb-2 rounded-full">
-                                        <span>
-                                            <PlusIcon className="w-4 h-4" />
-                                        </span>
-                                        <span>Pesanan Baru</span>
-                                    </Button>
-                                </DialogTrigger>
-                                <DialogContent className="sm:max-w-[425px]">
-                                    <DialogHeader>
-                                        <DialogTitle>Pesanan Baru!</DialogTitle>
-                                        <DialogDescription>
-                                            Buat data pesanan baru di Rata?
-                                        </DialogDescription>
-                                    </DialogHeader>
-                                    {/* Form Pesanan baru */}
-                                    <FormNewOrder />
-                                    {/* Akhir Form Pesanan baru */}
-                                </DialogContent>
-                            </Dialog>
-                            <Button variant="outline" className="rounded-full">
-                                Export
-                            </Button>
-                        </div>
-                    </div>
-                    <TabsContent value="overview">
-                        <Card className="p-3">
-                            <CardHeader>
-                                <CardTitle>
-                                    <h1 className="text-2xl">Pesanan</h1>
-                                </CardTitle>
-                                <CardDescription>
-                                    Semua seluruh orderan ada disini.
-                                </CardDescription>
-                            </CardHeader>
-                            <CardContent>
-                                {orders.data.length > 0 ? (
-                                    <Table>
-                                        <TableHeader>
-                                            <TableRow>
-                                                <TableHead className="w-[100px]">
-                                                    ID
-                                                </TableHead>
-                                                <TableHead>Status</TableHead>
-                                                <TableHead>Waktu</TableHead>
-                                                <TableHead>
-                                                    Nama Pelanggan
-                                                </TableHead>
-                                                <TableHead>
-                                                    Kategori Pesanan
-                                                </TableHead>
-                                                <TableHead>Jumlah</TableHead>
-                                            </TableRow>
-                                        </TableHeader>
-                                        <TableBody>
-                                            {orders.data.map((order) => (
-                                                <TableRow
-                                                    key={order.id}
-                                                    className="h-12"
-                                                >
-                                                    <TableCell className="font-medium">
-                                                        {order.id}
-                                                    </TableCell>
-                                                    <TableCell>
-                                                        <Badge
-                                                            variant={`${
-                                                                order.payment_status ===
-                                                                "Lunas"
-                                                                    ? ""
-                                                                    : "outline"
-                                                            }`}
-                                                            className={
-                                                                "rounded-full"
-                                                            }
-                                                        >
-                                                            {
-                                                                order.payment_status
-                                                            }
-                                                        </Badge>
-                                                    </TableCell>
-                                                    <TableCell>
-                                                        {order.date}
-                                                    </TableCell>
-                                                    <TableCell>
-                                                        {order.name}
-                                                    </TableCell>
-                                                    <TableCell>
-                                                        {order.order_category}
-                                                    </TableCell>
-                                                    <TableCell>
-                                                        {new Intl.NumberFormat(
-                                                            "id-ID",
-                                                            {
-                                                                style: "currency",
-                                                                currency: "IDR",
-                                                                maximumSignificantDigits: 3,
-                                                            }
-                                                        ).format(order.amount)}
-                                                    </TableCell>
-                                                    <TableCell>
-                                                        <DropdownMenu>
-                                                            <DropdownMenuTrigger
-                                                                asChild
-                                                            >
-                                                                <Button
-                                                                    aria-haspopup="true"
-                                                                    size="icon"
-                                                                    variant="ghost"
-                                                                >
-                                                                    <MoreHorizontal className="h-4 w-4" />
-                                                                    <span className="sr-only">
-                                                                        Toggle
-                                                                        menu
-                                                                    </span>
-                                                                </Button>
-                                                            </DropdownMenuTrigger>
-                                                            <DropdownMenuContent align="end">
-                                                                <DropdownMenuLabel>
-                                                                    Aksi
-                                                                </DropdownMenuLabel>
-                                                                <DropdownMenuItem>
-                                                                    Edit
-                                                                </DropdownMenuItem>
-                                                                <DropdownMenuItem>
-                                                                    Delete
-                                                                </DropdownMenuItem>
-                                                            </DropdownMenuContent>
-                                                        </DropdownMenu>
-                                                    </TableCell>
-                                                </TableRow>
-                                            ))}
-                                        </TableBody>
-                                    </Table>
-                                ) : (
-                                    <div className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
-                                        <div className="flex flex-1 items-center justify-center rounded-lg p-3 border border-dashed shadow-sm">
-                                            <div className="flex flex-col items-center gap-1 text-center">
-                                                <h3 className="text-2xl font-bold tracking-tight">
-                                                    Ternyata Kamu belum
-                                                    mempunyai pesanan...
-                                                </h3>
-                                                <p className="text-sm text-muted-foreground mb-3">
-                                                    Tekan tombol Pesanan Baru
-                                                    dibawah 👇
-                                                </p>
-                                                <Dialog>
-                                                    <DialogTrigger asChild>
-                                                        <Button className="flex items-center gap-2 mb-2 rounded-full">
-                                                            <span>
-                                                                <PlusIcon className="w-4 h-4" />
-                                                            </span>
-                                                            <span>
-                                                                Pesanan Baru
-                                                            </span>
-                                                        </Button>
-                                                    </DialogTrigger>
-                                                    <DialogContent className="sm:max-w-[425px]">
-                                                        <DialogHeader>
-                                                            <DialogTitle>
-                                                                Pesanan Baru!
-                                                            </DialogTitle>
-                                                            <DialogDescription>
-                                                                Buat data
-                                                                pesanan baru di
-                                                                Rata?
-                                                            </DialogDescription>
-                                                        </DialogHeader>
-                                                        {/* Form Pesanan baru */}
-                                                        <FormNewOrder />
-                                                        {/* Akhir Form Pesanan baru */}
-                                                    </DialogContent>
-                                                </Dialog>
-                                            </div>
-                                        </div>
-                                    </div>
-                                )}
-                            </CardContent>
-                        </Card>
-                    </TabsContent>
-                    <TabsContent value="status">
-                        Change your password here.
-                    </TabsContent>
-                </Tabs>
-            </Container>
-        </>
-    );
+                                    <TableCell>
+                                        <AlertDialog>
+                                            <AlertDialogTrigger asChild>
+                                               <Button variant="ghost" size="icon">
+                                                    <TrashIcon className="h-4 w-4" />
+                                               </Button>
+                                            </AlertDialogTrigger>
+                                            <AlertDialogContent>
+                                                <AlertDialogHeader>
+                                                    <AlertDialogTitle>Apakah anda yakin?</AlertDialogTitle>
+                                                    <AlertDialogDescription>
+                                                        Tindakan ini tidak dapat dibatalkan. Ini akan menghapus pesanan secara permanen
+                                                    </AlertDialogDescription>
+                                                </AlertDialogHeader>
+                                                <AlertDialogFooter>
+                                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                                    <AlertDialogAction key={i} onClick={() => deleteOrder(order.id)}>
+                                                        Hapus
+                                                    </AlertDialogAction>
+                                                </AlertDialogFooter>
+                                            </AlertDialogContent>
+                                        </AlertDialog>
+
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+
+                        </TableBody>
+                    </Table>
+                </CardContent>
+                <CardFooter>
+
+                </CardFooter>
+            </Card>
+        </Container>
+    </>
+  )
 }
-Index.layout = (page) => <App children={page} />;
+Index.layout = (page) => <App title="Daftar Pesanan" children={page} />

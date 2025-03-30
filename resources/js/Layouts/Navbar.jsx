@@ -32,7 +32,7 @@ import {
 } from "@/Components/ui/drawer";
 
 export default function Navbar() {
-    const { auth, ziggy } = usePage().props;
+    const { auth } = usePage().props;
     const navbar_items = [
         {
             title: "Dashboard",
@@ -52,7 +52,7 @@ export default function Navbar() {
     ];
 
     return (
-        <header className="sticky top-0 left-0 z-50 border-b w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 text-md">
+        <header className="sticky top-0 z-50 border-b w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 text-md">
             <Container className="flex items-center justify-between h-14">
                 <div className="flex items-center gap-10">
                     <header className="flex items-center gap-5">
@@ -95,20 +95,21 @@ export default function Navbar() {
                                         </header>
                                     </DrawerTitle>
                                     <nav>
-                                        <ul className="px-3 font-display flex-col space-y-3">
+                                        <ul className="px-3 font-display flex-col space-y-5 text-xs ">
                                             {navbar_items.map((item, i) => {
                                                 return (
                                                     <li key={i}>
-                                                        <Link
-                                                            href={item.link}
-                                                            className="flex items-center"
-                                                        >
-                                                            <span>
-                                                                {item.icon}
-                                                            </span>
-                                                            <span>
-                                                                {item.title}
-                                                            </span>
+                                                        <Link href={item.link}>
+                                                            <DrawerClose
+                                                                  className="flex items-center"
+
+                                                            >
+
+                                                                    {item.icon}
+
+                                                                    {item.title}
+
+                                                            </DrawerClose>
                                                         </Link>
                                                     </li>
                                                 );

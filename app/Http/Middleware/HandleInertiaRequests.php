@@ -41,13 +41,8 @@ class HandleInertiaRequests extends Middleware
                 ...(new Ziggy)->toArray(),
                 'location' => $request->url(),
             ],
-            'wallet' => DB::table('orders')->sum('amount'),
-            'total' => [
-                'order' => Order::count(),
-                'website' => Order::query()->where('order_category', 'like', '%'. 'Pembuatan Website' .'%')->count(),
-                'design' => Order::query()->where('order_category', 'like', '%'. 'Desain PPT' .'%')->count(),
-                'banner' => Order::query()->where('order_category', 'like', '%'. 'Desain Banner' .'%')->count(),
-            ]
+
+
         ];
     }
 }
